@@ -32,7 +32,7 @@ namespace ConsoleApplication1
                     Range columns = range.Columns;
                     var rowCount = rows.Count;
                     var colCount = columns.Count;
-                    Selenium s = new Selenium();
+                    var s = new Selenium();
                     
                     for (int row = 2; row <= rowCount; row++)
                     {
@@ -75,23 +75,19 @@ namespace ConsoleApplication1
                                 select.SelectByText(whatpromptedyou);*/
 
                             case "VerifyTextContains":
-                            Assert.That(s.WebActions(elementType,elementName).Text,Is.StringContaining(inputValue));
+                                Assert.That(s.WebActions(elementType,elementName).Text,Is.StringContaining(inputValue));
+                                using (var writer = new StreamWriter("c:/log.txt", true))
                                 break;
                         }
                 }
-
                 oWorkbook.Close();
                 oXlApplication.Quit();
                 s.driver.Quit();
-
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
             }
         }
-
-        
     }
-    
 }

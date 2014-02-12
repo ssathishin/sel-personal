@@ -64,11 +64,6 @@ namespace ConsoleApplication1
 
         }
 
-       
-        
-
-
-
         public void InitiateBrowser(String url)
         {
             driver = new FirefoxDriver();
@@ -178,110 +173,13 @@ namespace ConsoleApplication1
             return wait.Until(elem => driver.FindElement(By.Id(elementName)));
         }
 
-        private void TestGlc(String url)
-        {
-
-            var glcDevUrl = "http://cmsdev2.worldvision.com.au/glc/default.aspx";
-            var glcTestUrl = "http://cmstest2.worldvision.com.au/glc/default.aspx";
-            var glcstageUrl = "http://cmsstage.worldvision.com.au/glc/default.aspx";
-            var glcUrlToTest = "";
-
-            switch (url)
-            {
-                case "dev" :
-                    glcUrlToTest = glcDevUrl;
-                    break;
-                case "stage" :
-                    glcUrlToTest = glcstageUrl;
-                    break;
-                case "test" :
-                    glcUrlToTest = glcTestUrl;
-                    break;
-            }
-            
-            for (int i = 0; i < 2; i++)
-            {
-                try
-                {
-                    InitiateBrowser(glcUrlToTest);
-                    WebActions("Id", "btn-cta").Click();
-                    WebActions("LinkText","QLD").Click();
-                    WebActions("LinkText","Register now").Click();
-                    WebActions("Id","GlcRegistrationViewModel_NumberOfStudents").Clear();
-                    WebActions("Id","GlcRegistrationViewModel_NumberOfStudents").SendKeys("99");
-                    new SelectElement(WebActions("Id","BasicSupporterInformationViewModel_Title")).SelectByText("Miss");
-                    WebActions("Id","BasicSupporterInformationViewModel_FirstName").SendKeys("Sarah");
-                    WebActions("Id","BasicSupporterInformationViewModel_LastName").SendKeys("Bell");
-                    WebActions("Id","PhoneNumberViewModel.PhoneNumberType_2").Click();
-                    WebActions("Id", "PhoneNumberViewModel_PhoneNumber").SendKeys("9999999999");
-                    WebActions("Id", "EmailAddressViewModel_EmailAddress").SendKeys("sathish.shrinivasulu@worldvision.com.au");
-                    WebActions("Id", "EmailAddressViewModel_ConfirmEmailAddress").SendKeys("sathish.shrinivasulu@worldvision.com.au");
-                    WebActions("Id","NextButton").Click();
-                    Thread.Sleep(1000);
-                    WebActions("Id","School").SendKeys("hill");
-                    Thread.Sleep(1000);
-                    WebActions("LinkText","Canberra Grammar School, Red Hill, RED HILL").Click();
-                    Thread.Sleep(1000);
-                    WebActions("Id","NextButton").Click();
-                    WebActions("Id","PaymentType_0").Click();
-                    WebActions("Id","CreditCardAuthorisation").Click();
-                    WebActions("Id","ReadTermsAndConditions").Click();
-                    WebActions("Id","NextButton").Click();
-                    WebActions("Name", "CardNum").SendKeys("4111111111111111");
-                    WebActions("Name","ExMnth").SendKeys("12");
-                    WebActions("Name","ExYr").SendKeys("15");
-                    WebActions("Name", "NmeCard").SendKeys("Sathish Kumar");
-                    WebActions("Id","Cvc2").SendKeys("1234");
-                    WebActions("Id","submitImageButton").Click();
-                    Thread.Sleep(3000);
-                    Assert.True(WebActions("Css","h4").Text.StartsWith("W5"));
-                    driver.Quit();
-
-                }
-                catch (Exception errException)
-                {
-                    Console.WriteLine(errException.Message);
-                }
-            }
-        }
-
-        private void Test40HourFamine(String testEnvironment)
-        {
-            var urlToTest = "";
-            var devUrl = "http://cmsdev2.worldvision.com.au/40hourfamine.aspx";
-            var testUrl = "http://cmstest2.worldvision.com.au/40hourfamine.aspx";
-            var stageUrl = "http://cmsstage.worldvision.com.au/40hourfamine.aspx";
-            var prodUrl = "http://worldvision.com.au/40hourfamine.aspx";
-
-            switch (testEnvironment)
-            {
-                case "dev":
-                    urlToTest = devUrl;
-                    break;
-                case "test":
-                    urlToTest = testUrl;
-                    break;
-                case "stage":
-                    urlToTest = stageUrl;
-                    break;
-                case "production":
-                    urlToTest = prodUrl;
-                    break;
-
-            }
-        }
-
-
         private static void Main(string[] args)
         {
-                
-
             var s = new Selenium();
             var r = new ReadExcel();
             r.TestUsingExcel();
             //s.TestGlc("dev");
             //s.Test40HourFamine("dev");
-
 
             /*using (var writer = new StreamWriter("c:/log.txt", true))
             {
@@ -297,90 +195,8 @@ namespace ConsoleApplication1
                 writer.WriteLine("Verify text : Funds raised for an emergency is : " + s.VerifyText("Funds raised for an emergency appeal are applied to the emergency response and for rehabilitation activities in the affected areas. Should the funds raised exceed the amount required to meet the emergency needs of the people in affected areas, or if there are changes in circumstances beyond World Vision's control that limit its ability to use all funds in the affected areas, World Vision will use the excess funds to help people in other life-changing emergency situations.", By.CssSelector("p.fs14")));
                 writer.WriteLine("Verify text : Your contact details is : " + s.VerifyText("Your contact details", By.XPath("//html[@id='ng-app']/body/div/div[3]/div[2]/form/div[3]/h3")));
                 writer.WriteLine("Verify text : Phone Number 13 32 40 is : " + s.VerifyText("13 32 40",By.Id("footer-phone")));
-                writer.WriteLine("Verify text : World vision is a public benevolent is : " + s.VerifyText("World Vision is a Public Benevolent Institution and is endorsed as a Deductible Gift Recipient (DGR) by the Australian Tax Office. It also operates three funds that have DGR status.", By.CssSelector("div.span4 > p")));
-                s.driver.Quit();
+                writer.WriteLine("Verify text : World vision is a public benevolent is : " + s.VerifyText("World Vision is a Public Benevolent Institution and is endorsed as a Deductible Gift Recipient (DGR) by the Australian Tax Office. It also operates three funds that have DGR status.", By.CssSelector("div.span4 > p")));*/
             }
-
-
-
-
-                s.TestSouthSudan(url, "option50", "Word of Mouth", "Organisation");
-                s.TestSouthSudan(url, "option120", "World Vision Website", "Organisation");
-                s.TestSouthSudan(url, "option216", "At a Church event", "Organisation");
-                s.TestSouthSudan(url, "optionCustom", "Media", "Organisation");
-
-                s.TestSouthSudan(url, "option50", "Word of Mouth", "Individual");
-                s.TestSouthSudan(url, "option120", "World Vision Website", "Individual");
-                s.TestSouthSudan(url, "option216", "At a Church event", "Individual");
-                s.TestSouthSudan(url, "optionCustom", "Media", "Individual");
-
-
-                url = "https://emergenciesdev2.worldvision.com.au/#/syria-partners";
-                s.TestSouthSudan(url, "option500", "Word of Mouth", "Organisation");
-                s.TestSouthSudan(url, "option1000", "World Vision Website", "Organisation");
-                s.TestSouthSudan(url, "option5000", "At a Church event", "Organisation");
-                s.TestSouthSudan(url, "option10000", "At a Church event", "Organisation");
-                s.TestSouthSudan(url, "optionCustom", "Media", "Organisation");
-
-                s.TestSouthSudan(url, "option500", "Word of Mouth", "Individual");
-                s.TestSouthSudan(url, "option1000", "World Vision Website", "Individual");
-                s.TestSouthSudan(url, "option5000", "At a Church event", "Individual");
-                s.TestSouthSudan(url, "option10000", "At a Church event", "Individual");
-                s.TestSouthSudan(url, "optionCustom", "Media", "Individual");
-
-                url = "https://emergenciesdev2.worldvision.com.au/#/typhoon-haiyan";
-                s.TestSouthSudan(url, "option500", "Word of Mouth", "Organisation");
-                s.TestSouthSudan(url, "option1000", "World Vision Website", "Organisation");
-                s.TestSouthSudan(url, "option5000", "At a Church event", "Organisation");
-                s.TestSouthSudan(url, "option10000", "At a Church event", "Organisation");
-                s.TestSouthSudan(url, "optionCustom", "Media", "Organisation");
-
-                s.TestSouthSudan(url, "option500", "Word of Mouth", "Individual");
-                s.TestSouthSudan(url, "option1000", "World Vision Website", "Individual");
-                s.TestSouthSudan(url, "option5000", "At a Church event", "Individual");
-                s.TestSouthSudan(url, "option10000", "At a Church event", "Individual");
-                s.TestSouthSudan(url, "optionCustom", "Media", "Individual");
-
-                url = "https://emergenciesdev2.worldvision.com.au/#/typhoon-haiyan-baltazar";
-                s.TestSouthSudan(url, "option500", "Word of Mouth", "Organisation");
-                s.TestSouthSudan(url, "option1000", "World Vision Website", "Organisation");
-                s.TestSouthSudan(url, "option5000", "At a Church event", "Organisation");
-                s.TestSouthSudan(url, "option7500", "At a Church event", "Organisation");
-                s.TestSouthSudan(url, "option10000", "At a Church event", "Organisation");
-                s.TestSouthSudan(url, "optionCustom", "Media", "Organisation");
-
-                s.TestSouthSudan(url, "option500", "Word of Mouth", "Individual");
-                s.TestSouthSudan(url, "option1000", "World Vision Website", "Individual");
-                s.TestSouthSudan(url, "option5000", "At a Church event", "Individual");
-                s.TestSouthSudan(url, "option7500", "At a Church event", "Individual");
-                s.TestSouthSudan(url, "option10000", "At a Church event", "Individual");
-                s.TestSouthSudan(url, "optionCustom", "Media", "Individual");
-
-                url = "https://emergenciesdev2.worldvision.com.au/#/disaster-ready-donate";
-                s.TestSouthSudan(url, "option500", "Word of Mouth", "Organisation");
-                s.TestSouthSudan(url, "option1000", "World Vision Website", "Organisation");
-                s.TestSouthSudan(url, "option5000", "At a Church event", "Organisation");
-                s.TestSouthSudan(url, "option10000", "At a Church event", "Organisation");
-                s.TestSouthSudan(url, "optionCustom", "Media", "Organisation");
-
-                s.TestSouthSudan(url, "option500", "Word of Mouth", "Individual");
-                s.TestSouthSudan(url, "option1000", "World Vision Website", "Individual");
-                s.TestSouthSudan(url, "option5000", "At a Church event", "Individual");
-                s.TestSouthSudan(url, "option10000", "At a Church event", "Individual");
-                s.TestSouthSudan(url, "optionCustom", "Media", "Individual");
-
-                url = "https://emergenciesdev2.worldvision.com.au/#/south-sudan-donate";
-                s.TestSouthSudan(url, "option50", "Word of Mouth", "Individual");
-                s.TestSouthSudan(url, "option100", "World Vision Website", "Individual");
-                s.TestSouthSudan(url, "option150", "At a Church event", "Individual");
-                s.TestSouthSudan(url, "optionCustom", "Media", "Individual");
-
-                s.TestSouthSudan(url, "option50", "Word of Mouth", "Organisation");
-                s.TestSouthSudan(url, "option100", "World Vision Website", "Organisation");
-                s.TestSouthSudan(url, "option150", "At a Church event", "Organisation");
-                s.TestSouthSudan(url, "optionCustom", "Media", "Organisation");*/
-
         }
         }
-    }
-
+    
