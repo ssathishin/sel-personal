@@ -20,7 +20,7 @@ namespace ConsoleApplication1
 {
     class Selenium
     {
-        private IWebDriver driver;
+        public IWebDriver driver;
 
         private void FillContactDetails(String whatpromptedyou, String triggerReason, String ContactType)                                   
         {
@@ -65,20 +65,7 @@ namespace ConsoleApplication1
         }
 
        
-        private void FillCreditCardDetailsAndPay()
-        {
-            driver.FindElement(By.Id("cardHolderName")).SendKeys("Sathish");
-            driver.FindElement(By.Id("creditCardNumber")).SendKeys("4111111111111111");
-            driver.FindElement(By.Id("expiryMonth")).SendKeys("05");
-            driver.FindElement(By.Id("expiryYear")).SendKeys("17");
-            driver.FindElement(By.Id("cvc2")).SendKeys("1234");
-            driver.FindElement(By.Id("payButton")).Click();
-            WaitForElements();
-            var ReceiptNumber = driver.FindElement(By.Id("receiptNumber")).Text;
-            Console.WriteLine(ReceiptNumber);
-            VerifyOrderStatus(ReceiptNumber);
-
-        }
+        
 
 
 
@@ -94,12 +81,7 @@ namespace ConsoleApplication1
             
         }
 
-        private void WaitForElements()
-        {
-            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(60000));   
-            
-        }
-
+        
         private void VerifyOutcome(String id, String message)
         {
             Assert.That(driver.FindElement(By.Id(id)).Text, Is.StringContaining(message));
@@ -126,8 +108,6 @@ namespace ConsoleApplication1
                 driver.FindElement(By.Id("customAmount")).SendKeys("99999");
             }
             FillContactDetails(triggerOption, "triggerReason", contactType);
-            WaitForElements();
-            FillCreditCardDetailsAndPay();
             driver.Quit();
         }
 

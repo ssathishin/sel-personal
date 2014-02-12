@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -21,19 +23,17 @@ namespace ConsoleApplication1
 
             try
             {
-
                     var oXlApplication = new Microsoft.Office.Interop.Excel.Application();
-                    var oWorkbook = oXlApplication.Workbooks.Open("c:/test.xlsx");
+                    var testCasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                    var oWorkbook = oXlApplication.Workbooks.Open(testCasePath+"/test.xlsx");
                     var oWorksheet = oWorkbook.Sheets["Sheet1"];
                     var range = oWorksheet.UsedRange;
                     Range rows = range.Rows;
                     Range columns = range.Columns;
                     var rowCount = rows.Count;
                     var colCount = columns.Count;
-                    String url = "https://emergenciesdev2.worldvision.com.au";
                     Selenium s = new Selenium();
-                    s.InitiateBrowser(url);
-
+                    
                     for (int row = 2; row <= rowCount; row++)
                     {
                         var elementType = (String) oWorksheet.Cells(row, 1).Value;
@@ -48,6 +48,10 @@ namespace ConsoleApplication1
                        
                         switch (action)
                         {
+                            case "GotoURL" :
+                                s.InitiateBrowser(inputValue);
+                                break;
+                            
                             case "Click":
 
                                 s.WebActions(elementType, elementName).Click();
@@ -58,37 +62,33 @@ namespace ConsoleApplication1
                                 s.WebActions(elementType, elementName).Clear();
                                 break;
 
-                            case "SendKeys":
+                            case "EnterText":
 
                                 s.WebActions(elementType, elementName).SendKeys(inputValue);
                                 break;
-                            case "SelectValue" :
+                            case "SelectDropDownValue" :
 
                                 new SelectElement(s.WebActions(elementType, elementName)).SelectByText(inputValue);
                                 break;
                                 
                                 /*var select = new SelectElement(driver.FindElement(By.Id(triggerReason)));
                                 select.SelectByText(whatpromptedyou);*/
+
+                            case "VerifyTextContains":
+                            Assert.That(s.WebActions(elementType,elementName).Text,Is.StringContaining(inputValue));
+                                break;
                         }
                 }
-                    oWorkbook.Close();
+
+                oWorkbook.Close();
+                oXlApplication.Quit();
+                s.driver.Quit();
+
             }
             catch (Exception exception)
             {
-                
                 Console.WriteLine(exception);
-
             }
-
-
-            /*Excel.Application xlApplication = new 
-            Excel.Workbook xlWorkbook = xlApplication.Workbooks.Open("C:/myexcel.xlsx");
-            Excel.Worksheet xlWorksheet = xlWorkbook.Sheets[1];
-            Excel.Range xlRange = xlWorksheet.UsedRange;
-
-            int rowCount = xlRange.Rows.Count;
-            int colCount = xlRange.Columns.Count;*/
-
         }
 
         
