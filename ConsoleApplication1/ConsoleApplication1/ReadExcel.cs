@@ -1,30 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using Microsoft.Office.Interop.Excel;using System.Threading;
-using Microsoft.Office.Interop.Excel;
 using NUnit.Framework;
 using OpenQA.Selenium.Support.UI;
-using Selenium;
+
 
 namespace ConsoleApplication1
 {
 
     class ReadExcel
     {
+        String testCasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         public void TestUsingExcel()
         {
 
             try
             {
                     var oXlApplication = new Microsoft.Office.Interop.Excel.Application();
-                    var testCasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                    
                     var oWorkbook = oXlApplication.Workbooks.Open(testCasePath+"/test.xlsx");
                     var oWorksheet = oWorkbook.Sheets["Sheet1"];
                     var range = oWorksheet.UsedRange;
@@ -45,11 +39,16 @@ namespace ConsoleApplication1
                         {
                             inputValue = inputValue.ToString();
                         }
-                       
+                        if (elementType == "Browser")
+                        {
+                            s.InitiateBrowser(elementName);
+                        }
+
+
                         switch (action)
                         {
                             case "GotoURL" :
-                                s.InitiateBrowser(inputValue);
+                                s.GoToUrl(inputValue);
                                 break;
                             
                             case "Click":
@@ -70,9 +69,6 @@ namespace ConsoleApplication1
 
                                 new SelectElement(s.WebActions(elementType, elementName)).SelectByText(inputValue);
                                 break;
-                                
-                                /*var select = new SelectElement(driver.FindElement(By.Id(triggerReason)));
-                                select.SelectByText(whatpromptedyou);*/
 
                             case "VerifyTextContains":
                                 Assert.That(s.WebActions(elementType,elementName).Text,Is.StringContaining(inputValue));
@@ -80,12 +76,14 @@ namespace ConsoleApplication1
                                 break;
                         }
                 }
+                s.driver.Quit();
                 oWorkbook.Close();
                 oXlApplication.Quit();
-                s.driver.Quit();
             }
             catch (Exception exception)
             {
+                using (var writer = new StreamWriter(testCasePath+"/log.txt", true))
+                writer.WriteLine(exception);
                 Console.WriteLine(exception);
             }
         }

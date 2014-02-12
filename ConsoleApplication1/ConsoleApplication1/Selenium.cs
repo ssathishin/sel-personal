@@ -1,17 +1,9 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Threading;
-using ConsoleApplication1;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Android;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
-using OpenQA.Selenium.PhantomJS;
-using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Safari;
 using OpenQA.Selenium.Support.UI;
 
@@ -22,60 +14,31 @@ namespace ConsoleApplication1
     {
         public IWebDriver driver;
 
-        private void FillContactDetails(String whatpromptedyou, String triggerReason, String ContactType)                                   
+
+        public void InitiateBrowser(String browser)
         {
-            if (ContactType == "Individual")
+            switch (browser)
             {
-                driver.FindElement(By.Id("firstName")).SendKeys("Sathish");
-                driver.FindElement(By.Id("lastName")).SendKeys("Kumar");
+                case "Firefox" :
+                    driver = new FirefoxDriver();
+                    break;
+                case "Chrome" :
+                    driver = new ChromeDriver();
+                    break;
+                case "InternetExplorer" :
+                    driver = new InternetExplorerDriver();
+                    break;
+                case "Safari" :
+                    driver = new SafariDriver();
+                    break;
             }
-
-            if (ContactType == "Organisation")
-            {
-                driver.FindElement(By.Id("organisation")).Click();
-                driver.FindElement(By.Id("organisationName")).SendKeys("Organisation");
-                driver.FindElement(By.Id("contactName")).SendKeys("Contact Name");
-            }
-
-            driver.FindElement(By.Id("email")).SendKeys("sathish.shrinivasulu@worldvision.com.au");
-            driver.FindElement(By.Id("phoneNumber")).SendKeys("0412341234");
-            driver.FindElement(By.Id("address")).SendKeys("1 Vision Drive, BURWOOD EAST  VIC  3151");
-
-            if (IsElementVisible(triggerReason))
-            {
-                var select = new SelectElement(driver.FindElement(By.Id(triggerReason)));
-                select.SelectByText(whatpromptedyou);
-            }
-            driver.FindElement(By.Id("nextButton")).Click();
-        }
-
-
-        private bool IsElementVisible(String elementId)
-        {
-            try
-            {
-                driver.FindElement(By.Id(elementId));
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-        }
-
-        public void InitiateBrowser(String url)
-        {
-            driver = new FirefoxDriver();
-            //driver = new ChromeDriver();
-            //driver = new InternetExplorerDriver();
-            //driver = new AndroidDriver();
-            //driver = new SafariDriver();
             driver.Manage().Window.Maximize();
-            driver.Navigate().GoToUrl(url);
-            
         }
 
+        public void GoToUrl(String url)
+        {
+            driver.Navigate().GoToUrl(url);
+        }
         
         private void VerifyOutcome(String id, String message)
         {
@@ -90,20 +53,6 @@ namespace ConsoleApplication1
             System.Threading.Thread.Sleep(sleepTime);
             driver.Navigate().GoToUrl("https://servicesdev2.worldvision.com.au/orders/" + receiptNumber);
             Assert.That(driver.FindElement(By.CssSelector("pre")).Text, Is.StringContaining("Archived"));
-        }
-        
-
-
-        private void TestSouthSudan(String url, String dollarHandle,String triggerOption, String contactType)
-        {
-            InitiateBrowser(url);
-            driver.FindElement(By.Id(dollarHandle)).Click();
-            if (dollarHandle == "optionCustom")
-            {
-                driver.FindElement(By.Id("customAmount")).SendKeys("99999");
-            }
-            FillContactDetails(triggerOption, "triggerReason", contactType);
-            driver.Quit();
         }
 
         private bool VerifyText(String textToVerify,By elementBy)
@@ -131,32 +80,26 @@ namespace ConsoleApplication1
             switch (elementType)
             {
                 case "Id":
-                    //return wait.Until(driver.FindElement(By.Id(elementName)));
                     return wait.Until(elem => driver.FindElement(By.Id(elementName)));
                     break;
 
                 case "Name":
-
                     return wait.Until(elem => driver.FindElement(By.Name(elementName)));
                     break;
 
                 case "LinkText":
-
                     return wait.Until(elem => driver.FindElement(By.LinkText(elementName)));
                     break;
 
                 case "Css":
-
                     return wait.Until(elem => driver.FindElement(By.CssSelector(elementName)));
                     break;
 
                 case "Xpath":
-
                     return wait.Until(elem => driver.FindElement(By.XPath(elementName)));
                     break;
 
                 case "ClassName":
-
                     return wait.Until(elem => driver.FindElement(By.ClassName(elementName)));
                     break;
 
@@ -175,7 +118,6 @@ namespace ConsoleApplication1
 
         private static void Main(string[] args)
         {
-            var s = new Selenium();
             var r = new ReadExcel();
             r.TestUsingExcel();
             //s.TestGlc("dev");
@@ -198,5 +140,5 @@ namespace ConsoleApplication1
                 writer.WriteLine("Verify text : World vision is a public benevolent is : " + s.VerifyText("World Vision is a Public Benevolent Institution and is endorsed as a Deductible Gift Recipient (DGR) by the Australian Tax Office. It also operates three funds that have DGR status.", By.CssSelector("div.span4 > p")));*/
             }
         }
-        }
+    }
     
