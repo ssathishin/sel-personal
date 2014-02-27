@@ -7,6 +7,7 @@ using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Safari;
 using OpenQA.Selenium.Support.UI;
 
+
 namespace ConsoleApplication1
 
 {
@@ -38,6 +39,11 @@ namespace ConsoleApplication1
         public void GoToUrl(String url)
         {
             driver.Navigate().GoToUrl(url);
+        }
+
+        public void CloseBrowser()
+        {
+            driver.Quit();
         }
         
         private void VerifyOutcome(String id, String message)
@@ -75,7 +81,7 @@ namespace ConsoleApplication1
 
         public IWebElement WebActions(String elementType, String elementName)
         {
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
 
             switch (elementType)
             {
@@ -120,9 +126,6 @@ namespace ConsoleApplication1
         {
             var r = new ReadExcel();
             r.TestUsingExcel();
-            //s.TestGlc("dev");
-            //s.Test40HourFamine("dev");
-
             /*using (var writer = new StreamWriter("c:/log.txt", true))
             {
                 s.InitiateBrowser(url);
