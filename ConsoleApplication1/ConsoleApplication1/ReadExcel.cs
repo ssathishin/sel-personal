@@ -50,59 +50,64 @@ namespace ConsoleApplication1
                             selenium.InitiateBrowser(elementName);
                         }
 
-                        if (elementType == "Browser" && elementName == "" )
+                        if (elementType == string.Empty)
+                        {
+                            SendEmail(DateTime.Now + " : Selen Boost test report","If you have not received an exception email the test steps must have reached end of test steps or Element Type is empty");
+                        }
+
+                        /*if (elementType == "Browser" && elementName == "" )
                         {
                             selenium.CloseBrowser();
-                        }
+                        }*/
 
                         switch (action)
                         {
                             case "GotoURL" :
                                 
                                 using (var writer = new StreamWriter(testCasePath + "/log.txt", true))
-                                    writer.WriteLine("Processing row : " + row + " : Go to URL contains : " + elementName + "Value : " + inputValue);
+                                    writer.WriteLine(DateTime.Now + " : Processing row : " + row + " : Go to URL contains : " + elementName + " Value : " + inputValue);
                                 selenium.GoToUrl(inputValue);
                                 break;
 
                             case "Close" :
                                 
                                 using (var writer = new StreamWriter(testCasePath + "/log.txt", true))
-                                    writer.WriteLine("Processing row : " + row + " : Browser close is called : " + elementName + "Value : " + inputValue);
+                                    writer.WriteLine(DateTime.Now + " : Processing row : " + row + " : Browser close is called : " + elementName + " Value : " + inputValue);
                                 selenium.CloseBrowser();
                                 break;
                            
                             case "Click":
 
                                 using (var writer = new StreamWriter(testCasePath + "/log.txt", true))
-                                    writer.WriteLine("Processing row : " + row + " : Element being clicked on is : " + elementName + "Value : " + inputValue);
+                                    writer.WriteLine(DateTime.Now + " : Processing row : " + row + " : Element being clicked on is : " + elementName + " Value : " + inputValue);
                                 selenium.WebActions(elementType, elementName).Click();
                                 break;
 
                             case "Clear":
 
                                 using (var writer = new StreamWriter(testCasePath + "/log.txt", true))
-                                    writer.WriteLine("Processing row : " + row + " : Clearing Element : " + elementName + "Value : " + inputValue);
+                                    writer.WriteLine(DateTime.Now + " : Processing row : " + row + " : Clearing Element : " + elementName + " Value : " + inputValue);
                                 selenium.WebActions(elementType, elementName).Clear();
                                 break;
 
                             case "EnterText":
 
                                 using (var writer = new StreamWriter(testCasePath + "/log.txt", true))
-                                    writer.WriteLine("Processing row : " + row + " : Entering text on : " + elementName + "Value : " + inputValue);
+                                    writer.WriteLine(DateTime.Now + " : Processing row : " + row + " : Entering text on : " + elementName + " Value : " + inputValue);
                                 selenium.WebActions(elementType, elementName).SendKeys(inputValue);
                                 break;
 
                             case "SelectDropDownValue" :
 
                                 using (var writer = new StreamWriter(testCasePath + "/log.txt", true))
-                                    writer.WriteLine("Processing row : " + row + " : Selecting a value from the dropdown : " + elementName + "Value : " + inputValue);
+                                    writer.WriteLine(DateTime.Now + " : Processing row : " + row + " : Selecting a value from the dropdown : " + elementName + " Value : " + inputValue);
                                 new SelectElement(selenium.WebActions(elementType, elementName)).SelectByText(inputValue);
                                 break;
 
                             case "VerifyTextContains":
 
                                 using (var writer = new StreamWriter(testCasePath + "/log.txt", true))
-                                    writer.WriteLine("Processing row : " + row + " : Verify Text Contains : " + elementName + "Value : " + inputValue);
+                                    writer.WriteLine(DateTime.Now + " : Processing row : " + row + " : Verify Text Contains : " + elementName + " Value : " + inputValue);
                                 Assert.That(selenium.WebActions(elementType, elementName).Text, Is.StringContaining(inputValue));
                                 break;
                         }
@@ -114,8 +119,10 @@ namespace ConsoleApplication1
             catch (Exception exception)
             {
                 using (var writer = new StreamWriter(testCasePath+"/log.txt", true))
-                writer.WriteLine("Error while executing the above line : " + exception);
-                SendEmail("Exception while running tests. Please check the logs", "Test logs are found here in the test machine : " + testCasePath + "/log.txt");
+                    writer.WriteLine(DateTime.Now + " : Error while executing the above line : " + exception);
+                using (var writer = new StreamWriter(testCasePath+"/error.txt",true))
+                    writer.WriteLine(DateTime.Now + " : Error while executing the above line : " + exception);
+                SendEmail(DateTime.Now + " : Exception while running tests. Please check the logs", "Error description : " + exception);
                 selenium.CloseBrowser();
             }
         }
