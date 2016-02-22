@@ -3,10 +3,10 @@ using System.IO;
 using System.Net.Mail;
 using System.Reflection;
 using Microsoft.Office.Interop.Excel;
-using System.Threading;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium;
+
 
 
 namespace ConsoleApplication1
@@ -45,20 +45,20 @@ namespace ConsoleApplication1
                         {
                             inputValue = inputValue.ToString();
                         }
-                        if (elementType == "Browser")
+                        if (elementType == "Browser" && action == "GotoURL")
                         {
                             selenium.InitiateBrowser(elementName);
                         }
 
                         if (elementType == string.Empty)
                         {
-                            SendEmail(DateTime.Now + " : Selen Boost test report","If you have not received an exception email the test steps must have reached end of test steps or Element Type is empty");
+                            SendEmail(DateTime.Now + " : Test report","If you have not received an exception email the test steps must have reached end of test steps or Element Type is empty");
                         }
 
-                        /*if (elementType == "Browser" && elementName == "" )
+                        if (elementType == "Browser" && action == "Close" )
                         {
                             selenium.CloseBrowser();
-                        }*/
+                        }
 
                         switch (action)
                         {
@@ -110,7 +110,15 @@ namespace ConsoleApplication1
                                     writer.WriteLine(DateTime.Now + " : Processing row : " + row + " : Verify Text Contains : " + elementName + " Value : " + inputValue);
                                 Assert.That(selenium.WebActions(elementType, elementName).Text, Is.StringContaining(inputValue));
                                 break;
-                        }
+                        case "EnterKey":
+
+                            using (var writer = new StreamWriter(testCasePath + "/log.txt", true))
+                                writer.WriteLine(DateTime.Now + " : Processing row : " + row + " : Verify Text Contains : " + elementName + " Value : " + inputValue);
+                            selenium.WebActions(elementType, elementName).SendKeys(Keys.Enter);
+                                break;
+
+
+                    }
                 }
                 selenium.driver.Quit();
                 oWorkbook.Close();

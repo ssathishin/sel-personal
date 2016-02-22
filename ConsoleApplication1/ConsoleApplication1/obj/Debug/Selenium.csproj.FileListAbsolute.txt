@@ -29,3 +29,4 @@ C:\Projects\sel-personal\ConsoleApplication1\ConsoleApplication1\bin\Debug\WebDr
 C:\Projects\sel-personal\ConsoleApplication1\ConsoleApplication1\bin\Debug\nunit.framework.xml
 C:\Projects\sel-personal\ConsoleApplication1\ConsoleApplication1\bin\Debug\WebDriver.xml
 C:\Projects\sel-personal\ConsoleApplication1\ConsoleApplication1\bin\Debug\WebDriver.Support.xml
+C:\Projects\sel-personal\ConsoleApplication1\ConsoleApplication1\obj\Debug\Selenium.csprojResolveAssemblyReference.cache

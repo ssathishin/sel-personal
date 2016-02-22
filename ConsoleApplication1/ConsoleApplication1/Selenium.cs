@@ -110,9 +110,15 @@ namespace ConsoleApplication1
 
         }
 
+        public void WaitToLoadPage()
+        {
+
+        }
+
         public IWebElement WebActions(String elementType, String elementName)
         {
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(20));
 
             switch (elementType)
             {
@@ -125,7 +131,7 @@ namespace ConsoleApplication1
                 case "LinkText":
                     return wait.Until(elem => driver.FindElement(By.LinkText(elementName)));
                     
-                case "Css":
+                case "Css":                    
                     return wait.Until(elem => driver.FindElement(By.CssSelector(elementName)));
                     
                 case "Xpath":
