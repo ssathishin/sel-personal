@@ -422,3 +422,5 @@
    at OpenQA.Selenium.Support.UI.DefaultWait`1.Until[TResult](Func`2 condition) in c:\Projects\WebDriver\trunk\dotnet\src\support\UI\DefaultWait.cs:line 180
    at ConsoleApplication1.Selenium.WebActions(String elementType, String elementName) in c:\Projects\sel-personal\ConsoleApplication1\ConsoleApplication1\Selenium.cs:line 129
    at ConsoleApplication1.ReadExcel.TestUsingExcel() in c:\Projects\sel-personal\ConsoleApplication1\ConsoleApplication1\ReadExcel.cs:line 83
+2/22/2016 10:12:57 PM : Processing row : 2 : Go to URL contains : Firefox Value : https://giftsdev2.worldvision.com.au
+2/22/2016 10:12:58 PM : Processing row : 3 : Element being clicked on is : div.span12.text-align-center > #Growinguphealthy > span.category-icon.Growinguphealthy Value : 

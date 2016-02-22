@@ -3,7 +3,6 @@ using System.Drawing;
 using Microsoft.Office.Interop.Excel;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Android;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
@@ -80,7 +79,7 @@ namespace ConsoleApplication1
 
         private void VerifyOutcome(String id, String message)
         {
-            Assert.That(driver.FindElement(By.Id(id)).Text, Is.StringContaining(message));
+            Assert.That(driver.FindElement(By.Id(id)).Text, Does.Contain(message));
         }
 
 
@@ -90,7 +89,7 @@ namespace ConsoleApplication1
             int sleepTime = 35000;
             System.Threading.Thread.Sleep(sleepTime);
             driver.Navigate().GoToUrl("https://servicesdev2.worldvision.com.au/orders/" + receiptNumber);
-            Assert.That(driver.FindElement(By.CssSelector("pre")).Text, Is.StringContaining("Archived"));
+            Assert.That(driver.FindElement(By.CssSelector("pre")).Text, Does.Contain("Archived"));
         }
 
         private bool VerifyText(String textToVerify, By elementBy)
@@ -119,37 +118,27 @@ namespace ConsoleApplication1
             {
                 case "Id":
                     return wait.Until(elem => driver.FindElement(By.Id(elementName)));
-                    break;
-
+                    
                 case "Name":
                     return wait.Until(elem => driver.FindElement(By.Name(elementName)));
-                    break;
-
+                    
                 case "LinkText":
                     return wait.Until(elem => driver.FindElement(By.LinkText(elementName)));
-                    break;
-
+                    
                 case "Css":
                     return wait.Until(elem => driver.FindElement(By.CssSelector(elementName)));
-                    break;
-
+                    
                 case "Xpath":
                     return wait.Until(elem => driver.FindElement(By.XPath(elementName)));
-                    break;
-
+                    
                 case "ClassName":
                     return wait.Until(elem => driver.FindElement(By.ClassName(elementName)));
-                    break;
-
+                    
                 case "PartialLink":
-
                     return wait.Until(elem => driver.FindElement(By.PartialLinkText(elementName)));
-                    break;
-
+                    
                 case "TagName":
-
-                    return wait.Until(elem => driver.FindElement(By.TagName(elementName)));
-                    break;
+                    return wait.Until(elem => driver.FindElement(By.TagName(elementName)));                    
             }
             return wait.Until(elem => driver.FindElement(By.Id(elementName)));
         }
